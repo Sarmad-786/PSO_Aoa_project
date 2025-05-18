@@ -1,0 +1,54 @@
+📘 Particle Swarm Optimization (PSO) Algorithm
+Objective:
+To find the global minimum of a given fitness function using a population of candidate solutions (particles) that move through the search space based on individual and collective experience.
+
+Algorithm Steps
+1. Initialize Parameters
+N = Number of particles
+D = Number of dimensions
+T = Maximum number of iterations
+w = Inertia weight
+c1, c2 = Cognitive and social coefficients
+position[i] = Initial position of particle i (random)
+velocity[i] = Initial velocity of particle i (random)
+pBest[i] = Best position found by particle 
+gBest = Best position found by the swarm
+
+2. Evaluate Fitness
+For each particle i, evaluate the fitness using the fitness function:
+
+double fitnessFunction(vector<double> position) {
+    double sum = 0;
+    for (double val : position) {
+        sum += val * val; // Sphere function
+    }
+    return sum;
+}
+Set pBest[i] = position[i]
+
+If fitness is better than gBest, update gBest
+
+3. Main PSO Loop (Repeat for T iterations)
+For each particle i:
+
+Update Velocity:
+velocity[i][d] = w * velocity[i][d] 
+              + c1 * r1 * (pBest[i][d] - position[i][d]) 
+              + c2 * r2 * (gBest[d] - position[i][d]);
+r1, r2 are random numbers in [0, 1]
+
+Update Position:
+position[i][d] += velocity[i][d];
+Evaluate Fitness at New Position
+
+Update Personal Best:
+If new fitness < pBestValue[i],
+then:
+pBest[i] = position[i];
+
+Update Global Best:
+If new fitness < gBestValue, then:
+gBest = position[i];
+
+4. Termination
+After T iterations, return gBest as the best solution and gBestValue as its corresponding fitness.

@@ -26,9 +26,10 @@ Particle Swarm Optimization is a population-based search technique inspired by t
 ## 🛠️ How to Compile
 ```bash
 g++ -o pso pso.cpp
+
 **## How to Run**
 ./pso
-🧪 Sample Output
+ ##  Sample OUTPUT
 Global Best Solution: 0.00345 0.00291
 Global Best Fitness Value: 0.00002
 📊 Time and Space Complexity

@@ -1,0 +1,112 @@
+ #include <iostream>
+\#include <vector>
+\#include <cstdlib>
+\#include <ctime>
+\#include <cmath>
+
+using namespace std;
+
+struct Particle {
+vector<double> position;
+vector<double> velocity;
+vector<double> pBest;
+double pBestValue;
+};
+
+double fitnessFunction(const vector<double>& position) {
+// Example: Sphere function
+double sum = 0;
+for (double val : position) {
+sum += val \* val;
+}
+return sum;
+}
+
+void updateVelocity(Particle& p, const vector<double>& gBest, double w, double c1, double c2) {
+for (int i = 0; i < p.position.size(); i++) {
+double r1 = static\_cast<double>(rand()) / RAND\_MAX;
+double r2 = static\_cast<double>(rand()) / RAND\_MAX;
+p.velocity\[i] = w \* p.velocity\[i] + c1 \* r1 \* (p.pBest\[i] - p.position\[i]) + c2 \* r2 \* (gBest\[i] - p.position\[i]);
+}
+}
+
+void updatePosition(Particle& p) {
+for (int i = 0; i < p.position.size(); i++) {
+p.position\[i] += p.velocity\[i];
+}
+}
+
+int main() {
+srand(time(0));
+
+```
+// Problem setup
+int numParticles = 30;
+int numDimensions = 2;
+int maxIterations = 100;
+double w = 0.5;  // inertia weight
+double c1 = 1.5; // cognitive coefficient
+double c2 = 1.5; // social coefficient
+
+// Initialize swarm
+vector<Particle> swarm(numParticles);
+vector<double> gBest(numDimensions, 0);
+double gBestValue = INFINITY;
+
+// Initialize particles
+for (int i = 0; i < numParticles; i++) {
+    swarm[i].position.resize(numDimensions);
+    swarm[i].velocity.resize(numDimensions);
+    swarm[i].pBest.resize(numDimensions);
+    for (int j = 0; j < numDimensions; j++) {
+        swarm[i].position[j] = (rand() % 100) / 100.0; // Random position
+        swarm[i].velocity[j] = (rand() % 100) / 100.0; // Random velocity
+    }
+    // Evaluate fitness
+    double fitness = fitnessFunction(swarm[i].position);
+    swarm[i].pBest = swarm[i].position;
+    swarm[i].pBestValue = fitness;
+
+    // Update global best
+    if (fitness < gBestValue) {
+        gBestValue = fitness;
+        gBest = swarm[i].position;
+    }
+}
+
+// Main PSO loop
+for (int t = 0; t < maxIterations; t++) {
+    for (int i = 0; i < numParticles; i++) {
+        // Update velocity and position
+        updateVelocity(swarm[i], gBest, w, c1, c2);
+        updatePosition(swarm[i]);
+
+        // Evaluate fitness
+        double fitness = fitnessFunction(swarm[i].position);
+
+        // Update personal best
+        if (fitness < swarm[i].pBestValue) {
+            swarm[i].pBestValue = fitness;
+            swarm[i].pBest = swarm[i].position;
+        }
+
+        // Update global best
+        if (fitness < gBestValue) {
+            gBestValue = fitness;
+            gBest = swarm[i].position;
+        }
+    }
+}
+
+// Output the results
+cout << "Global Best Solution: ";
+for (double val : gBest) {
+    cout << val << " ";
+}
+cout << endl;
+cout << "Global Best Fitness Value: " << gBestValue << endl;
+
+return 0;
+```
+
+}  is this the code for tis topic
